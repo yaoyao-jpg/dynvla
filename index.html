@@ -1,490 +1,870 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nerfies: Deformable Neural Radiance Fields</title>
+    <meta charset="utf-8">
+    <meta name="description" content="DynVLA: Learning World Dynamics for Action Reasoning in Autonomous Driving">
+    <meta name="keywords" content="VLA, End-to-end Autonomous Driving">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DynVLA: Learning World Dynamics for Action Reasoning in Autonomous Driving</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
 
-    gtag('js', new Date());
+        gtag('js', new Date());
 
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+        gtag('config', 'G-PYVRSFMDRL');
+    </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/images/arrow.ico">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
-      </a>
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://hypernerf.github.io">
-            HyperNeRF
-          </a>
-          <a class="navbar-item" href="https://nerfies.github.io">
-            Nerfies
-          </a>
-          <a class="navbar-item" href="https://latentfusion.github.io">
-            LatentFusion
-          </a>
-          <a class="navbar-item" href="https://photoshape.github.io">
-            PhotoShape
-          </a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</nav>
-
-
 <section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Nerfies: Deformable Neural Radiance Fields</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
-            <span class="author-block">
-              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
-            </span>
-          </div>
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+                <div class="column has-text-centered">
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Washington,</span>
-            <span class="author-block"><sup>2</sup>Google Research</span>
-          </div>
+                    <h1 class="title is-1 publication-title">DynVLA: Learning World Dynamics for Action Reasoning in
+                        Autonomous Driving</h1>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
+                    <!-- Authors (edit these later if you want non-anonymous) -->
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block">Anonymous Authors</span>
+                    </div>
+
+                    <!-- Affiliations (optional) -->
+                    <div class="is-size-5 publication-authors">
+                        <span class="author-block">Anonymous Institution</span>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="column has-text-centered">
+                        <div class="publication-links">
+
+                            <!-- arXiv -->
+                            <span class="link-block">
+                <a href="#"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
+                    <i class="ai ai-arxiv"></i>
                   </span>
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+
+                            <!-- Code -->
+                            <span class="link-block">
+                <a href="https://github.com/yaoyao-jpg/dynvla"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
+                    <i class="fab fa-github"></i>
                   </span>
                   <span>Code</span>
-                  </a>
+                </a>
               </span>
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+
+                            <!-- Data (optional) -->
+                            <span class="link-block">
+                <a href="https://github.com/yaoyao-jpg/dynvla/releases"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="far fa-images"></i>
+                    <i class="far fa-images"></i>
                   </span>
                   <span>Data</span>
-                  </a>
+                </a>
+              </span>
+
+                        </div>
+                    </div>
+                    <!-- /Links -->
+
+                </div>
             </div>
-
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
 </section>
 
 
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
+<div class="section-divider-wrap" aria-hidden="true">
+    <div class="container is-max-desktop">
+        <div class="section-divider"></div>
     </div>
-  </div>
+</div>
+
+<section class="section abstract-section">
+    <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+                <h2 class="title is-3">Abstract</h2>
+                <div class="content has-text-justified">
+                    <p>
+                        We propose <strong>DynVLA</strong>, a driving VLA model that
+                        introduces a new CoT paradigm termed
+                        Dynamics CoT. DynVLA forecasts compact world dynamics before action generation, enabling more
+                        informed and physically grounded
+                        decision-making.
+                        To obtain compact dynamics representations, DynVLA introduces a Dynamics Tokenizer that
+                        compresses future evolution into a small set
+                        of dynamics tokens. Considering the rich environment dynamics in interaction-intensive driving
+                        scenarios, DynVLA decouples ego-centric
+                        and environment-centric dynamics, yielding more accurate world dynamics modeling.
+                        We then train DynVLA to generate dynamics tokens before actions through SFT and RFT, improving
+                        decision quality while maintaining
+                        latency-efficient inference. Compared to Textual CoT and Visual CoT, Dynamics CoT captures the
+                        evolution of the world in a compact,
+                        interpretable, and efficient form. Extensive experiments on NAVSIM, Bench2Drive, and a
+                        large-scale in-house dataset demonstrate that
+                        DynVLA consistently outperforms Textual CoT and Visual CoT methods, validating the effectiveness
+                        and practical value of Dynamics CoT.
+                    </p>
+                </div>
+                <div class="teaser-divider" aria-hidden="true"></div>
+                <figure class="teaser-figure">
+                    <img src="./static/images/teaser.png" alt="Comparison of CoT paradigms teaser" loading="lazy">
+                    <figcaption class="teaser-caption">
+                        <strong>Comparison of different CoT paradigms in autonomous driving VLA models.</strong>
+                        (a) Textual CoT suffers from limited spatiotemporal understanding and high inference latency
+                        due to long textual reasoning traces.
+                        (b) Visual CoT introduces substantial redundancy and computational overhead from pixel-level
+                        generation.
+                        (c) Dynamics CoT compresses future dynamics into a small set of tokens, achieving
+                        latency-efficient inference with compact reasoning and accurate spatiotemporal modeling.
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+        <!--/ Abstract. -->
+    </div>
 </section>
 
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
-          </p>
-          <p>
-            Our approach augments neural radiance fields
-            (NeRF) by optimizing an
-            additional continuous volumetric deformation field that warps each observed point into a
-            canonical 5D NeRF.
-            We observe that these NeRF-like deformation fields are prone to local minima, and
-            propose a coarse-to-fine optimization method for coordinate-based models that allows for
-            more robust optimization.
-            By adapting principles from geometry processing and physical simulation to NeRF-like
-            models, we propose an elastic regularization of the deformation field that further
-            improves robustness.
-          </p>
-          <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models that allow for photorealistic renderings of the subject from arbitrary
-            viewpoints, which we dub <i>"nerfies"</i>. We evaluate our method by collecting data
-            using a
-            rig with two mobile phones that take time-synchronized photos, yielding train/validation
-            images of the same pose at different viewpoints. We show that our method faithfully
-            reconstructs non-rigidly deforming scenes and reproduces unseen views with high
-            fidelity.
-          </p>
+<!-- ===================== Dynamics Tokenizer & DynVLA Overview ===================== -->
+<section class="section section-alt" id="dynamics-methods">
+    <div class="container is-max-desktop">
+        <div class="columns is-variable is-6">
+            <div class="column" id="dynamics-tokenizer">
+                <h2 class="title is-4 has-text-centered">Dynamics Tokenizer</h2>
+                <img class="method-figure" src="./static/images/tokenizer.png" alt="Dynamics tokenizer diagram"
+                     loading="lazy">
+                <div class="content has-text-justified">
+                    <p>
+                        Given adjacent image observations, a dynamics encoder extracts ego-centric and
+                        environment-centric dynamics, which are discretized via VQ codebooks. Then, the ego-centric
+                        dynamics are regularized by GT ego action, and the combined dynamics are decoded to
+                        reconstruct the future image and BEV map conditioned on each current state.
+                    </p>
+                </div>
+            </div>
+            <div class="column" id="dynvla-overview">
+                <h2 class="title is-4 has-text-centered">DynVLA Overview</h2>
+                <img class="method-figure" src="./static/images/overview.png" alt="DynVLA overview diagram"
+                     loading="lazy">
+                <div class="content has-text-justified">
+                    <p>
+                        DynVLA is supervised to first generate discrete dynamics tokens followed by action tokens,
+                        forming structured Dynamics CoT modeling.
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <!--/ Abstract. -->
-
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-    <!--/ Paper video. -->
-  </div>
 </section>
+<!-- ===================== /Dynamics Tokenizer & DynVLA Overview ===================== -->
 
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
-          <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
+<!-- ===================== DynVLA Training Pipeline ===================== -->
+<section class="section" id="dynvla-pipeline">
+    <div class="container is-max-desktop">
         <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <!--/ Matting. -->
-
-    <!-- Animation. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
+            <div class="column is-full-width">
+                <h2 class="title is-3 has-text-centered">Training Pipeline</h2>
+                <img class="method-figure" src="./static/images/pipeline.png" alt="DynVLA training pipeline diagram"
+                     loading="lazy">
+                <div class="content has-text-justified">
+                    <p>
+                        DynVLA first learns a Dynamics Tokenizer by reconstructing future states from adjacent
+                        frames, producing discrete dynamics tokens. It then performs SFT on Dynamics CoT, training the
+                        model to generate dynamics tokens before action tokens. Finally, the policy is optimized via
+                        RFT with trajectory-level reward and KL regularization.
+                    </p>
+                </div>
             </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
         </div>
-        <br/>
-        <!--/ Interpolating. -->
-
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <!--/ Re-rendering. -->
-
-      </div>
     </div>
-    <!--/ Animation. -->
+</section>
+<!-- ===================== /DynVLA Training Pipeline ===================== -->
 
+<!-- ===================== Dynamics Transfer ===================== -->
+<section class="section section-alt" id="dynamics-transfer">
+    <div class="container is-max-desktop">
 
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
-
-        <div class="content has-text-justified">
-          <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
-          </p>
-          <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
-          </p>
+        <div class="columns is-centered">
+            <div class="column is-full-width">
+                <h2 class="title is-3 has-text-centered">Transferability of Learned Dynamics</h2>
+                <p>
+                    We extract discrete dynamics tokens from one scene, inject them into another, and decode the
+                    resulting future states.
+                </p>
+            </div>
         </div>
-      </div>
+
+        <!-- ===== No-plugin carousel (scroll-snap), 3 slides = case1..3 ===== -->
+        <div class="transfer-carousel">
+            <button class="transfer-nav prev" type="button" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="transfer-track" id="transfer-track">
+
+                <!-- ===================== Slide: case1 ===================== -->
+                <div class="transfer-slide" data-case="1">
+                    <div class="transfer-card">
+                        <div class="transfer-card-header">
+                            <div class="transfer-controls transfer-controls--header" data-transfer-controls>
+                                <div class="transfer-card-title">
+                                    <div class="dropdown transfer-mode-dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-rounded transfer-mode-btn"
+                                                    aria-haspopup="true">
+                                                <span class="transfer-mode-label">Dynamics 1</span>
+                                                <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
+                                            </button>
+                                        </div>
+
+                                        <div class="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a class="dropdown-item is-active" href="javascript:void(0)"
+                                                   data-mode="ego_right">Dynamics 1</a>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                   data-mode="agent_forward">Dynamics 2</a>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                   data-mode="ego_forward_agent_stop">Dynamics 3</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="transfer-dynamics-row">
+                                    <span class="transfer-dynamics-key">Original scene dynamics:</span>
+                                    <span class="transfer-original-dynamics">
+                                        <span class="tag is-success is-light">Ego: Left</span>
+                                    </span>
+                                </div>
+                                <div class="transfer-dynamics-row">
+                                    <span class="transfer-dynamics-key">Injected dynamics:</span>
+                                    <span class="transfer-injected-dynamics">
+                                        <span class="tag is-success is-light">Ego: Right</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="transfer-card-caption">Scene B with selected dynamics injection (top) and
+                                ground truth (bottom).
+                            </div>
+                        </div>
+
+                        <div class="transfer-grid-2x2">
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Current Image and BEV</div>
+                                <img class="transfer-img" data-transfer-img data-kind="curr" data-case="1"
+                                     src="./static/images/transfer/ego_right/case1/curr.png" alt="case1 current"
+                                     loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Decoded Counterfactual Future</div>
+                                <img class="transfer-img" data-transfer-img data-kind="dec" data-case="1"
+                                     src="./static/images/transfer/ego_right/case1/dec_fut.png" alt="case1 decoded"
+                                     loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Current Image and BEV</div>
+                                <img class="transfer-img" data-transfer-img data-kind="curr" data-case="1"
+                                     src="./static/images/transfer/ego_right/case1/curr.png"
+                                     alt="case1 current (repeat)" loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Ground-truth Future</div>
+                                <img class="transfer-img" data-transfer-img data-kind="gt" data-case="1"
+                                     src="./static/images/transfer/ego_right/case1/gt_fut.png" alt="case1 gt"
+                                     loading="lazy">
+                            </div>
+
+                            <!-- overlay: divider between top and bottom rows -->
+                            <div class="transfer-divider" aria-hidden="true">
+                                <div class="transfer-divider-line"></div>
+                            </div>
+                            <div class="transfer-row-arrow transfer-row-arrow--top" aria-hidden="true"></div>
+                            <div class="transfer-row-arrow transfer-row-arrow--bottom" aria-hidden="true"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ===================== /case1 ===================== -->
+
+                <!-- ===================== Slide: case2 ===================== -->
+                <div class="transfer-slide" data-case="2">
+                    <div class="transfer-card">
+                        <div class="transfer-card-header">
+                            <div class="transfer-controls transfer-controls--header" data-transfer-controls>
+                                <div class="transfer-card-title">
+                                    <div class="dropdown transfer-mode-dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-rounded transfer-mode-btn"
+                                                    aria-haspopup="true">
+                                                <span class="transfer-mode-label">Dynamics 1</span>
+                                                <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
+                                            </button>
+                                        </div>
+
+                                        <div class="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a class="dropdown-item is-active" href="javascript:void(0)"
+                                                   data-mode="ego_right">Dynamics 1</a>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                   data-mode="agent_forward">Dynamics 2</a>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                   data-mode="ego_forward_agent_stop">Dynamics 3</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="transfer-dynamics-row">
+                                    <span class="transfer-dynamics-key">Original scene dynamics:</span>
+                                    <span class="transfer-original-dynamics">
+                                        <span class="tag is-success is-light">Ego: Left</span>
+                                    </span>
+                                </div>
+                                <div class="transfer-dynamics-row">
+                                    <span class="transfer-dynamics-key">Injected dynamics:</span>
+                                    <span class="transfer-injected-dynamics">
+                                        <span class="tag is-success is-light">Ego: Right</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="transfer-card-caption">Scene B with selected dynamics injection (top) and
+                                ground truth (bottom).
+                            </div>
+                        </div>
+
+                        <div class="transfer-grid-2x2">
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Current Image and BEV</div>
+                                <img class="transfer-img" data-transfer-img data-kind="curr" data-case="2"
+                                     src="./static/images/transfer/ego_right/case2/curr.png" alt="case2 current"
+                                     loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Decoded Counterfactual Future</div>
+                                <img class="transfer-img" data-transfer-img data-kind="dec" data-case="2"
+                                     src="./static/images/transfer/ego_right/case2/dec_fut.png" alt="case2 decoded"
+                                     loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Current Image and BEV</div>
+                                <img class="transfer-img" data-transfer-img data-kind="curr" data-case="2"
+                                     src="./static/images/transfer/ego_right/case2/curr.png"
+                                     alt="case2 current (repeat)" loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Ground-truth Future</div>
+                                <img class="transfer-img" data-transfer-img data-kind="gt" data-case="2"
+                                     src="./static/images/transfer/ego_right/case2/gt_fut.png" alt="case2 gt"
+                                     loading="lazy">
+                            </div>
+
+                            <!-- overlay: divider between top and bottom rows -->
+                            <div class="transfer-divider" aria-hidden="true">
+                                <div class="transfer-divider-line"></div>
+                            </div>
+                            <div class="transfer-row-arrow transfer-row-arrow--top" aria-hidden="true"></div>
+                            <div class="transfer-row-arrow transfer-row-arrow--bottom" aria-hidden="true"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ===================== /case2 ===================== -->
+
+                <!-- ===================== Slide: case3 ===================== -->
+                <div class="transfer-slide" data-case="3">
+                    <div class="transfer-card">
+                        <div class="transfer-card-header">
+                            <div class="transfer-controls transfer-controls--header" data-transfer-controls>
+                                <div class="transfer-card-title">
+                                    <div class="dropdown transfer-mode-dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-rounded transfer-mode-btn"
+                                                    aria-haspopup="true">
+                                                <span class="transfer-mode-label">Dynamics 1</span>
+                                                <span class="icon is-small"><i class="fas fa-angle-down"></i></span>
+                                            </button>
+                                        </div>
+
+                                        <div class="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a class="dropdown-item is-active" href="javascript:void(0)"
+                                                   data-mode="ego_right">Dynamics 1</a>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                   data-mode="agent_forward">Dynamics 2</a>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                   data-mode="ego_forward_agent_stop">Dynamics 3</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="transfer-dynamics-row">
+                                    <span class="transfer-dynamics-key">Original scene dynamics:</span>
+                                    <span class="transfer-original-dynamics">
+                                        <span class="tag is-success is-light">Ego: Left</span>
+                                    </span>
+                                </div>
+                                <div class="transfer-dynamics-row">
+                                    <span class="transfer-dynamics-key">Injected dynamics:</span>
+                                    <span class="transfer-injected-dynamics">
+                                        <span class="tag is-success is-light">Ego: Right</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="transfer-card-caption">Scene B with selected dynamics injection (top) and
+                                ground truth (bottom).
+                            </div>
+                        </div>
+
+                        <div class="transfer-grid-2x2">
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Current Image and BEV</div>
+                                <img class="transfer-img" data-transfer-img data-kind="curr" data-case="3"
+                                     src="./static/images/transfer/ego_right/case3/curr.png" alt="case3 current"
+                                     loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Decoded Counterfactual Future</div>
+                                <img class="transfer-img" data-transfer-img data-kind="dec" data-case="3"
+                                     src="./static/images/transfer/ego_right/case3/dec_fut.png" alt="case3 decoded"
+                                     loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Current Image and BEV</div>
+                                <img class="transfer-img" data-transfer-img data-kind="curr" data-case="3"
+                                     src="./static/images/transfer/ego_right/case3/curr.png"
+                                     alt="case3 current (repeat)" loading="lazy">
+                            </div>
+
+                            <div class="transfer-panel">
+                                <div class="transfer-panel-label">Ground-truth Future</div>
+                                <img class="transfer-img" data-transfer-img data-kind="gt" data-case="3"
+                                     src="./static/images/transfer/ego_right/case3/gt_fut.png" alt="case3 gt"
+                                     loading="lazy">
+                            </div>
+
+                            <!-- overlay: divider between top and bottom rows -->
+                            <div class="transfer-divider" aria-hidden="true">
+                                <div class="transfer-divider-line"></div>
+                            </div>
+                            <div class="transfer-row-arrow transfer-row-arrow--top" aria-hidden="true"></div>
+                            <div class="transfer-row-arrow transfer-row-arrow--bottom" aria-hidden="true"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ===================== /case3 ===================== -->
+
+            </div>
+
+            <button class="transfer-nav next" type="button" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="transfer-dots" id="transfer-dots" aria-label="Transfer examples"></div>
+        <!-- ===== /carousel ===== -->
+
     </div>
-    <!--/ Concurrent Work. -->
-
-  </div>
 </section>
+<!-- ===================== /Dynamics Transfer ===================== -->
 
-
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}</code></pre>
-  </div>
+<!-- ===================== Performance Comparison ===================== -->
+<section class="section" id="performance-comparison">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered">
+            <div class="column is-full-width">
+                <h2 class="title is-3 has-text-centered">Performance Comparison</h2>
+                <div class="comparison-grid">
+                    <figure class="comparison-figure comparison-grid__main">
+                        <img src="./static/images/navsim.png" alt="NAVSIM benchmark comparison" loading="lazy">
+                        <figcaption class="comparison-caption">Comparison on real-world NAVSIM Benchmark.</figcaption>
+                    </figure>
+                    <figure class="comparison-figure comparison-grid__top">
+                        <img src="./static/images/bench2drive.png" alt="Bench2Drive benchmark comparison"
+                             loading="lazy">
+                        <figcaption class="comparison-caption">Comparison on close-loop Bench2Drive Benchmark.
+                        </figcaption>
+                    </figure>
+                    <figure class="comparison-figure comparison-grid__bottom">
+                        <img src="./static/images/In-house.png" alt="In-house dataset comparison" loading="lazy">
+                        <figcaption class="comparison-caption">Comparison on a large-scale In-house Dataset.
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+<!-- ===================== /Performance Comparison ===================== -->
+
+<!-- ===================== Ablation Studys ===================== -->
+<section class="section section-alt" id="ablation-studies">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered">
+            <div class="column is-full-width">
+                <h2 class="title is-3 has-text-centered">Ablation Studys</h2>
+                <div class="ablation-grid">
+                    <div class="ablation-column">
+                        <figure class="ablation-figure">
+                            <img src="./static/images/abl_cot.png" alt="CoT design ablation" loading="lazy">
+                            <figcaption class="ablation-caption">Analysis on CoT Design and Latency.</figcaption>
+                        </figure>
+                        <figure class="ablation-figure">
+                            <img src="./static/images/abl_train.png" alt="Training stages ablation" loading="lazy">
+                            <figcaption class="ablation-caption">Ablation on Training Stages.</figcaption>
+                        </figure>
+                    </div>
+                    <div class="ablation-column">
+                        <figure class="ablation-figure ablation-figure--small">
+                            <img src="./static/images/abl_vq.png" alt="VQ code activation analysis" loading="lazy">
+                            <figcaption class="ablation-caption">Number of Activated VQ Codes during Dynamics Tokenizer
+                                Training.
+                            </figcaption>
+                        </figure>
+                        <figure class="ablation-figure">
+                            <img src="./static/images/abl_tok.png" alt="Tokenizer design ablation" loading="lazy">
+                            <figcaption class="ablation-caption">Ablation on Dynamics Tokenizer Designs.</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ===================== /Ablation Studys ===================== -->
+
+<!-- ===================== Qualitative Analysis ===================== -->
+<section class="section" id="qualitative-analysis">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered">
+            <div class="column is-full-width">
+                <h2 class="title is-3 has-text-centered">Qualitative Analysis</h2>
+                <img class="method-figure" src="./static/images/q_anay.png" alt="Qualitative analysis results"
+                     loading="lazy">
+                <div class="content has-text-justified">
+                    <p>
+                        <strong>Dynamics CoT improves planning by reasoning over future dynamics.</strong> The first
+                        two columns show the current observation and the future decoded by reasoned dynamics. The
+                        third and last columns compare planning results with and without Dynamics CoT. Compared to
+                        direct action prediction, Dynamics CoT provides intent-aware, foresighted, and
+                        constraint-compliant future dynamics, enabling safer and more feasible planning in challenging
+                        scenarios.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ===================== /Qualitative Analysis ===================== -->
+
+
+<!--<section class="section" id="BibTeX">-->
+<!--    <div class="container is-max-desktop content">-->
+<!--        <h2 class="title">BibTeX</h2>-->
+<!--        <pre><code>@article{park2021nerfies,-->
+<!--  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},-->
+<!--  title     = {Nerfies: Deformable Neural Radiance Fields},-->
+<!--  journal   = {ICCV},-->
+<!--  year      = {2021},-->
+<!--}</code></pre>-->
+<!--    </div>-->
+<!--</section>-->
 
 
 <footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            This means you are free to borrow the <a
-              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
-            we just ask that you link back to this page in the footer.
-            Please remember to remove the analytics code included in the header of the website which
-            you do not want on your website.
-          </p>
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="content">
+                    <p>
+                        We thank the authors of <a href="https://nerfies.github.io/">Nerfies</a> that kindly open
+                        sourced the template of this website.
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </footer>
 
+<script>
+    (function () {
+        const track = document.getElementById('transfer-track');
+        const dots = document.getElementById('transfer-dots');
+        if (!track) return;
+
+        const slides = Array.from(track.querySelectorAll('.transfer-slide'));
+        if (slides.length === 0) return;
+
+        // Build dots
+        dots.innerHTML = '';
+        slides.forEach((_, i) => {
+            const b = document.createElement('button');
+            b.className = 'transfer-dot' + (i === 0 ? ' is-active' : '');
+            b.type = 'button';
+            b.setAttribute('aria-label', 'Go to example ' + (i + 1));
+            b.addEventListener('click', () => scrollToIndex(i));
+            dots.appendChild(b);
+        });
+
+        const prev = track.parentElement.querySelector('.transfer-nav.prev');
+        const next = track.parentElement.querySelector('.transfer-nav.next');
+        prev && prev.addEventListener('click', () => scrollByDir(-1));
+        next && next.addEventListener('click', () => scrollByDir(1));
+
+        function scrollToIndex(i) {
+            const w = track.clientWidth;
+            track.scrollTo({left: i * w, behavior: 'smooth'});
+            setActive(i);
+        }
+
+        function scrollByDir(dir) {
+            const w = track.clientWidth;
+            const i = Math.round(track.scrollLeft / w);
+            const j = Math.max(0, Math.min(slides.length - 1, i + dir));
+            scrollToIndex(j);
+        }
+
+        function setActive(i) {
+            const ds = Array.from(dots.querySelectorAll('.transfer-dot'));
+            ds.forEach((d, k) => d.classList.toggle('is-active', k === i));
+        }
+
+        // Update active dot on manual scroll
+        let raf = null;
+        track.addEventListener('scroll', () => {
+            if (raf) cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => {
+                const w = track.clientWidth;
+                const i = Math.round(track.scrollLeft / w);
+                setActive(i);
+            });
+        });
+    })();
+</script>
+
+<script>
+    (function () {
+        // ---- modes map to your folder names exactly ----
+        const MODES = {
+            ego_right: {
+                label: 'Dynamics 1',
+                tagsHTML: `
+        <span class="tag is-success is-light">Ego: Right</span>
+      `,
+                originalHTML: `
+        <span class="tag is-success is-light">Ego: Left</span>
+      `
+            },
+            agent_forward: {
+                label: 'Dynamics 2',
+                tagsHTML: `
+        <span class="tag is-warning is-light">Agents: Forward</span>
+      `,
+                originalHTML: `
+        <span class="tag is-warning is-light">Agents: Stop</span>
+      `
+            },
+            ego_forward_agent_stop: {
+                label: 'Dynamics 3',
+                tagsHTML: `
+        <span class="tag is-success is-light">Ego: Forward</span>
+        <span class="tag is-warning is-light">Agents: Stop</span>
+      `,
+                originalHTML: `
+        <span class="tag is-success is-light">Ego: Stop</span>
+        <span class="tag is-warning is-light">Agents: Forward</span>
+      `
+            }
+        };
+
+        let currentMode = 'ego_right'; // default
+
+        const controls = Array.from(document.querySelectorAll('[data-transfer-controls]'));
+        const dropdowns = controls
+            .map(control => control.querySelector('.transfer-mode-dropdown'))
+            .filter(Boolean);
+        const btnEls = controls
+            .map(control => control.querySelector('.transfer-mode-btn'))
+            .filter(Boolean);
+        const labelEls = controls
+            .map(control => control.querySelector('.transfer-mode-label'))
+            .filter(Boolean);
+        const originalEls = controls
+            .map(control => control.querySelector('.transfer-original-dynamics'))
+            .filter(Boolean);
+        const injectedEls = controls
+            .map(control => control.querySelector('.transfer-injected-dynamics'))
+            .filter(Boolean);
+        const modeItems = Array.from(
+            document.querySelectorAll('.transfer-mode-dropdown .dropdown-item[data-mode]')
+        );
+
+        const track = document.getElementById('transfer-track');
+        const dots = document.getElementById('transfer-dots');
+        const prev = document.querySelector('.transfer-nav.prev');
+        const next = document.querySelector('.transfer-nav.next');
+
+        if (!track) return;
+
+        function closeAllDropdowns() {
+            dropdowns.forEach(d => d.classList.remove('is-active'));
+        }
+
+        // ---- dropdown open/close (Bulma-like) ----
+        controls.forEach(control => {
+            const dropdown = control.querySelector('.transfer-mode-dropdown');
+            const btn = control.querySelector('.transfer-mode-btn');
+            if (!dropdown || !btn) return;
+            btn.addEventListener('click', () => {
+                const willOpen = !dropdown.classList.contains('is-active');
+                closeAllDropdowns();
+                if (willOpen) dropdown.classList.add('is-active');
+            });
+        });
+        document.addEventListener('click', (e) => {
+            dropdowns.forEach(d => {
+                if (!d.contains(e.target)) d.classList.remove('is-active');
+            });
+        });
+
+        // ---- update all images based on mode ----
+        function filename(kind) {
+            if (kind === 'curr') return 'curr.png';
+            if (kind === 'dec') return 'dec_fut.png';
+            return 'gt_fut.png';
+        }
+
+        function setMode(mode) {
+            if (!MODES[mode]) return;
+            currentMode = mode;
+
+            // update label + tags
+            labelEls.forEach(el => {
+                el.textContent = MODES[mode].label;
+            });
+            originalEls.forEach(el => {
+                el.innerHTML = MODES[mode].originalHTML;
+            });
+            injectedEls.forEach(el => {
+                el.innerHTML = MODES[mode].tagsHTML;
+            });
+            btnEls.forEach(btn => {
+                btn.setAttribute('aria-label', MODES[mode].label);
+            });
+
+            // highlight active dropdown item
+            modeItems.forEach(a => {
+                a.classList.toggle('is-active', a.dataset.mode === mode);
+            });
+
+            // swap image sources (case1..3)
+            document.querySelectorAll('[data-transfer-img]').forEach(img => {
+                const kind = img.dataset.kind;     // curr/dec/gt
+                const c = img.dataset.case;        // 1/2/3
+                img.src = `./static/images/transfer/${mode}/case${c}/${filename(kind)}`;
+            });
+        }
+
+        modeItems.forEach(a => {
+            a.addEventListener('click', () => {
+                setMode(a.dataset.mode);
+                closeAllDropdowns();
+            });
+        });
+
+        // ---- dots + arrow navigation (3 slides) ----
+        const slides = Array.from(track.querySelectorAll('.transfer-slide'));
+
+        function setActiveDot(i) {
+            Array.from(dots.querySelectorAll('.transfer-dot')).forEach((d, k) => {
+                d.classList.toggle('is-active', k === i);
+            });
+        }
+
+        function scrollToIndex(i) {
+            const w = track.clientWidth;
+            track.scrollTo({left: i * w, behavior: 'smooth'});
+            setActiveDot(i);
+        }
+
+        function scrollByDir(dir) {
+            const w = track.clientWidth;
+            const i = Math.round(track.scrollLeft / w);
+            const j = Math.max(0, Math.min(slides.length - 1, i + dir));
+            scrollToIndex(j);
+        }
+
+        // build dots
+        dots.innerHTML = '';
+        slides.forEach((_, i) => {
+            const b = document.createElement('button');
+            b.className = 'transfer-dot' + (i === 0 ? ' is-active' : '');
+            b.type = 'button';
+            b.setAttribute('aria-label', 'Go to case ' + (i + 1));
+            b.addEventListener('click', () => scrollToIndex(i));
+            dots.appendChild(b);
+        });
+
+        prev && prev.addEventListener('click', () => scrollByDir(-1));
+        next && next.addEventListener('click', () => scrollByDir(1));
+
+        let raf = null;
+        track.addEventListener('scroll', () => {
+            if (raf) cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => {
+                const w = track.clientWidth;
+                const i = Math.round(track.scrollLeft / w);
+                setActiveDot(i);
+            });
+        });
+
+        // init
+        setMode(currentMode);
+    })();
+</script>
+
+
 </body>
+
 </html>
+

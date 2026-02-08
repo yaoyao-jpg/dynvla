@@ -18,6 +18,137 @@ body {
 }
 
 
+
+
+.section-divider-wrap {
+  padding: 0.2rem 0 0.1rem;
+}
+
+.section-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.18);
+  width: 100%;
+}
+
+.section-alt {
+  background: #f6f6f6;
+}
+
+.abstract-section {
+  padding-top: 1rem;
+}
+.teaser-figure {
+  margin: 0.2rem auto 0.4rem auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.teaser-figure img {
+  width: 70%;
+  max-width: 760px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+.teaser-caption {
+  margin-top: 0.2rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(0,0,0,0.72);
+}
+
+
+.method-figure {
+  width: 100%;
+  max-width: 980px;
+  height: auto;
+  display: block;
+  margin: 0.6rem auto 0.75rem;
+  border-radius: 10px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+.comparison-grid__main {
+  grid-row: 1 / span 2;
+}
+.comparison-figure {
+  margin: 0;
+  text-align: center;
+}
+.comparison-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+@media (max-width: 980px) {
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .comparison-grid__main {
+    grid-row: auto;
+  }
+}
+
+
+.ablation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.6rem;
+  align-items: start;
+}
+.ablation-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.ablation-figure {
+  margin: 0;
+  text-align: center;
+}
+.ablation-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.ablation-figure--small img {
+  width: 85%;
+}
+.ablation-caption {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(0,0,0,0.7);
+}
+@media (max-width: 980px) {
+  .ablation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.comparison-caption {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(0,0,0,0.7);
+}
+.teaser-divider {
+  width: 70%;
+  max-width: 760px;
+  height: 1px;
+  background: rgba(0,0,0,0.12);
+  margin: 0.25rem auto 0.45rem auto;
+}
 .teaser .hero-body {
   padding-top: 0;
   padding-bottom: 3rem;
@@ -155,3 +286,392 @@ body {
 #interpolation-image-wrapper img {
   border-radius: 5px;
 }
+
+/* ===================== Dynamics Transfer ===================== */
+#dynamics-transfer .subtitle {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.transfer-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.transfer-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
+}
+
+.transfer-card-title {
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.transfer-card-caption {
+  margin-top: 0;
+  color: rgba(0,0,0,0.65);
+  font-size: 0.95rem;
+}
+
+.transfer-chip-row .tag i {
+  margin-right: 0.35rem;
+}
+
+.transfer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 1.2fr;
+  gap: 0.9rem;
+}
+
+.transfer-panel {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.92);
+  position: relative;
+  z-index: 2;
+}
+
+.transfer-panel-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.55rem;
+  color: rgba(0,0,0,0.78);
+}
+
+.transfer-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.transfer-dyn {
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.00));
+}
+
+.transfer-dyn.is-gt {
+  background: linear-gradient(180deg, rgba(0,0,0,0.015), rgba(0,0,0,0.00));
+}
+
+.transfer-dyn-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.transfer-dyn-group-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  color: rgba(0,0,0,0.72);
+}
+
+.transfer-dyn-arrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  color: rgba(0,0,0,0.70);
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(0,0,0,0.18);
+}
+
+.transfer-footnote {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: rgba(0,0,0,0.64);
+}
+
+.transfer-footnote .sep {
+  margin: 0 0.45rem;
+  color: rgba(0,0,0,0.35);
+}
+
+.transfer-footnote .k {
+  font-weight: 800;
+  color: rgba(0,0,0,0.72);
+}
+
+@media (max-width: 980px) {
+  .transfer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ===================== /Dynamics Transfer ===================== */
+
+
+/* ===== DynVLA Transfer Carousel (no bulma-carousel dependency) ===== */
+.transfer-carousel {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.transfer-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.25rem 0.25rem 0.75rem 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.transfer-track::-webkit-scrollbar { height: 10px; }
+.transfer-track::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
+.transfer-track::-webkit-scrollbar-track { background: rgba(0,0,0,0.06); border-radius: 999px; }
+
+.transfer-slide {
+  scroll-snap-align: center;
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 1100px) {
+  .transfer-slide { flex-basis: 100%; }
+}
+
+.transfer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+  cursor: pointer;
+}
+
+.transfer-nav.prev { left: -10px; }
+.transfer-nav.next { right: -10px; }
+
+@media (max-width: 980px) {
+  .transfer-nav.prev { left: 6px; }
+  .transfer-nav.next { right: 6px; }
+}
+
+.transfer-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0.6rem;
+}
+
+.transfer-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.10);
+  cursor: pointer;
+}
+.transfer-dot.is-active {
+  background: rgba(0,0,0,0.55);
+  border-color: rgba(0,0,0,0.30);
+}
+/* ===== /DynVLA Transfer Carousel ===== */
+
+
+/* ===== Transfer controls (mode selector) ===== */
+.transfer-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0.1rem 0;
+  flex-wrap: wrap;
+}
+.transfer-controls--header {
+  width: 100%;
+}
+
+
+
+.transfer-dynamics-row{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.transfer-dynamics-key{
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(0,0,0,0.65);
+}
+
+.transfer-original-dynamics{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+.transfer-injected-dynamics{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.transfer-dynamics-row .tag{
+  margin: 0;
+  font-weight: 700;
+}
+.transfer-mode-label{
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.transfer-mode-dropdown .dropdown-item{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* make dropdown more prominent */
+.transfer-mode-btn {
+  border: 1px solid rgba(0,0,0,0.14);
+  background: rgba(255,255,255,0.7);
+  font-weight: 700;
+  font-size: 1rem;
+  height: auto;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px !important;
+  box-shadow: none;
+  gap: 6px;
+}
+.transfer-mode-btn .tag{
+  margin: 0;
+}
+/* ===== 2x2 grid (no middle dynamics panel) ===== */
+.transfer-grid-2x2 {
+  --transfer-col-gap: 2.6rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--transfer-col-gap);
+  row-gap: 0.9rem;
+}
+
+/* ===== Image: NO rounded corners ===== */
+.transfer-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0 !important; /* 핵심：去圆角 */
+}
+
+/* ===== No-plugin carousel (keep your arrow UI) ===== */
+.transfer-carousel { position: relative; margin-top: 0.75rem; }
+
+.transfer-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.25rem 0.25rem 0.75rem 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.transfer-slide { scroll-snap-align: center; flex: 0 0 100%; max-width: 100%; }
+
+.transfer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+  cursor: pointer;
+}
+
+.transfer-nav.prev { left: -10px; }
+.transfer-nav.next { right: -10px; }
+
+@media (max-width: 980px) {
+  .transfer-grid-2x2 { grid-template-columns: 1fr; }
+  .transfer-nav.prev { left: 6px; }
+  .transfer-nav.next { right: 6px; }
+}
+
+.transfer-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0.6rem;
+}
+
+.transfer-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.10);
+  cursor: pointer;
+}
+
+.transfer-dot.is-active {
+  background: rgba(0,0,0,0.55);
+  border-color: rgba(0,0,0,0.30);
+}
+
+/* ===== Divider between top/bottom rows inside 2x2 grid ===== */
+.transfer-divider{
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.transfer-divider-line{
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0,0,0,0.12);
+}
+
+
+.transfer-row-arrow{
+  position: absolute;
+  left: 50%;
+  width: calc(var(--transfer-col-gap) - 0.2rem);
+  height: 20px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+  background: url("../images/transfer/arrow-right.svg") center / 100% 100% no-repeat;
+}
+
+.transfer-row-arrow--top{ top: 25%; }
+.transfer-row-arrow--bottom{ top: 75%; }
+
+
+
+
+
+@media (max-width: 980px){
+  /* 单列时不需要中间分隔箭�?*/
+  .transfer-divider{ display: none; }
+  .transfer-row-arrow{ display: none; }
+}
+
